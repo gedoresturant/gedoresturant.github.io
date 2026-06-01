@@ -1,0 +1,1766 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قرية جدو</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .menu-tab.active {
+            background-color: #1e3a8a;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex flex-wrap justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-blue-900 flex items-center gap-2">
+                <i class="fas fa-utensils text-amber-500"></i>
+                <span>قرية جدو 16015</span>
+            </a>
+            
+            <nav class="hidden md:flex space-x-reverse space-x-6 font-semibold">
+                <a href="#home" class="text-blue-900 hover:text-amber-500 transition">الرئيسية</a>
+                <a href="#menu" class="text-gray-600 hover:text-amber-500 transition">القائمة (المنيو)</a>
+                <a href="#about" class="text-gray-600 hover:text-amber-500 transition">عن المطعم</a>
+                <a href="#contact" class="text-gray-600 hover:text-amber-500 transition">اتصل بنا</a>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <button onclick="toggleCart()" class="relative bg-amber-500 text-white px-4 py-2 rounded-full hover:bg-amber-600 transition flex items-center gap-2">
+                    <i class="fas fa-shopping-basket"></i>
+                    <span class="hidden sm:inline">السلة</span>
+                    <span id="cart-count" class="bg-blue-900 text-white text-xs rounded-full w-5 height-5 flex items-center justify-center absolute -top-2 -right-1 font-bold">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section id="home" class="relative bg-gray-900 text-white py-24 px-4 bg-cover bg-center" style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url('gedo 2.jpeg');">
+        <div class="container mx-auto text-center max-w-3xl">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">أكل فلاحي على أصوله</h1>
+            <p class="text-lg md:text-xl text-gray-200 mb-8 font-light">استمتع بتجربة طعام فريدة من نوعها مع خدمة التوصيل السريع والدفع الإلكتروني الآمن.</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#menu" class="bg-amber-500 hover:bg-amber-600 text-white font-bold px-8 py-3 rounded-lg shadow-lg transition transform hover:-translate-y-0.5">اطلب أونلاين الآن</a>
+                <a href="#contact" class="bg-transparent border-2 border-white hover:bg-white hover:text-gray-900 font-bold px-8 py-3 rounded-lg transition">موقعنا ومواعيدنا</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="menu" class="container mx-auto px-4 py-16">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-blue-900 mb-2">قائمة الطعام (المنيو)</h2>
+            <p class="text-gray-500">اختر وجبتك المفضلة وأضف الإضافات التي تحبها</p>
+        </div>
+
+        <div class="flex justify-center flex-wrap gap-3 mb-10" id="categories-container">
+            <button onclick="filterMenu('all')" class="menu-tab active px-6 py-2 rounded-full border border-gray-300 font-semibold transition shadow-sm">الكل</button>
+            <button onclick="filterMenu('sawany')" class="menu-tab px-6 py-2 rounded-full border border-gray-300 font-semibold transition shadow-sm">الصواني</button>
+            <button onclick="filterMenu('meals')" class="menu-tab px-6 py-2 rounded-full border border-gray-300 font-semibold transition shadow-sm">مشويات</button>
+            <button onclick="filterMenu('bedouin')" class="menu-tab px-6 py-2 rounded-full border border-gray-300 font-semibold transition shadow-sm">الأكل البدوي</button>
+            <button onclick="filterMenu('tawajeen')" class="menu-tab px-6 py-2 rounded-full border border-gray-300 font-semibold transition shadow-sm">طواجن</button>
+            <button onclick="filterMenu('fataat')" class="menu-tab px-6 py-2 rounded-full border border-gray-300 font-semibold transition shadow-sm">فتات</button>
+            <button onclick="filterMenu('kids')" class="menu-tab px-6 py-2 rounded-full border border-gray-300 font-semibold transition shadow-sm">وجبات الأطفال</button>
+            <button onclick="filterMenu('birds')" class="menu-tab px-6 py-2 rounded-full border border-gray-300 font-semibold transition shadow-sm">الطيور</button>
+            <button onclick="filterMenu('hawawshi')" class="menu-tab px-6 py-2 rounded-full border border-gray-300 font-semibold transition shadow-sm">حواوشي جريل</button>
+            <button onclick="filterMenu('zal3a')" class="menu-tab px-6 py-2 rounded-full border border-gray-300 font-semibold transition shadow-sm">ذلعة</button>
+            <button onclick="filterMenu('tasaat')" class="menu-tab px-6 py-2 rounded-full border border-gray-300 font-semibold transition shadow-sm">طاسات محمرة</button>
+            <button onclick="filterMenu('appetizers')" class="menu-tab px-6 py-2 rounded-full border border-gray-300 font-semibold transition shadow-sm">المقبلات</button>
+            <button onclick="filterMenu('soup')" class="menu-tab px-6 py-2 rounded-full border border-gray-300 font-semibold transition shadow-sm">الشوربة</button>
+            <button onclick="filterMenu('rice')" class="menu-tab px-6 py-2 rounded-full border border-gray-300 font-semibold transition shadow-sm">الأرز</button>
+            <button onclick="filterMenu('salads')" class="menu-tab px-6 py-2 rounded-full border border-gray-300 font-semibold transition shadow-sm">السلطات</button>
+            <button onclick="filterMenu('hot-drinks')" class="menu-tab px-6 py-2 rounded-full border border-gray-300 font-semibold transition shadow-sm">المشروبات الساخنة</button>
+            <button onclick="filterMenu('feteer')" class="menu-tab px-6 py-2 rounded-full border border-gray-300 font-semibold transition shadow-sm">فطائر</button>
+            <button onclick="filterMenu('cold-drinks')" class="menu-tab px-6 py-2 rounded-full border border-gray-300 font-semibold transition shadow-sm">المشروبات الباردة</button>
+            <button onclick="filterMenu('desserts')" class="menu-tab px-6 py-2 rounded-full border border-gray-300 font-semibold transition shadow-sm">الحلويات</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="menu-grid">
+            
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="sawany">
+                <img src="2.jpg" alt="صينية" class="w-full h-48 object-cover">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">صينية حفيدة جدو 3 افراد</h3>
+                        
+                        <span class="text-amber-600 font-bold text-lg">800 ج.م</span>
+                    </div>
+                    <p>ربع كفتة + نص فرخة + ربع سجق + حواوشي</p>
+                    <button onclick="addToCart('صينيه حفيدة جدو', 800, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="sawany">
+                <img src="2.jpg" alt="صينية" class="w-full h-48 object-cover">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">صينية جدو 4 أفراد</h3>
+                        
+                        <span class="text-amber-600 font-bold text-lg">1999 ج.م</span>
+                    </div>
+                    <p>نص كيلو كل من (كباب - كقته - سجق - شيش طاووق - ممبار)</p>
+                    <button onclick="addToCart('صينيه جدو', 1999, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="sawany">
+                <img src="baba.jpg" alt="صينية" class="w-full h-48 object-cover">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">صينية باب جدو 6 أفراد</h3>
+                        
+                        <span class="text-amber-600 font-bold text-lg">2999 ج.م</span>
+                    </div>
+                    <p>كيلو كفتة ومحشي ونص كيلو كل من (كباب - سجق - طرب - شيش طاووق)</p>
+                    <button onclick="addToCart('صينيه باب جدو', 2999, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="sawany">
+                <img src="2.jpg" alt="صينية" class="w-full h-48 object-cover">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">صينية حفيد جدو 8 أفراد</h3>
+                        
+                        <span class="text-amber-600 font-bold text-lg">3999 ج.م</span>
+                    </div>
+                    <p>كيلو كفته وشيش طاووق ومحشي ونص كيلو كل من (طرب - سجق - كباب - 4 فرد حمام)</p>
+                    <button onclick="addToCart('صينيه حفيد جدو', 3999, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="meals">
+                 <!--<img src="https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=500&q=80" alt="أكل بدوي" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">ربع كفتة كندوز</h3>
+                        <span class="text-amber-600 font-bold text-lg">250 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">ربع كفتة كندوز</p>
+                    <button onclick="addToCart('ربع كفتة كندوز', 250, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="meals">
+                 <!--<img src="https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=500&q=80" alt="أكل بدوي" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">ربع كفتة ضاني</h3>
+                        <span class="text-amber-600 font-bold text-lg">315 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">ربع كفتة ضاني</p>
+                    <button onclick="addToCart('ربع كفتة ضاني', 315, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="meals">
+                 <!--<img src="https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=500&q=80" alt="أكل بدوي" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">ربع كباب بتلو</h3>
+                        <span class="text-amber-600 font-bold text-lg">370 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">ربع كباب بتلو</p>
+                    <button onclick="addToCart('ربع كباب بتلو', 370, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="meals">
+                 <!--<img src="https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=500&q=80" alt="أكل بدوي" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">ربع كباب ضاني</h3>
+                        <span class="text-amber-600 font-bold text-lg">370 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">ربع كباب ضاني</p>
+                    <button onclick="addToCart('ربع كباب ضاني', 370, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="meals">
+                 <!--<img src="https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=500&q=80" alt="أكل بدوي" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">ربع ستيك</h3>
+                        <span class="text-amber-600 font-bold text-lg">380 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">ربع ستيك</p>
+                    <button onclick="addToCart('ربع ستيك', 380, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="meals">
+                 <!--<img src="https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=500&q=80" alt="أكل بدوي" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">ربع شيش طاووق</h3>
+                        <span class="text-amber-600 font-bold text-lg">190 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">ربع شيش طاووق</p>
+                    <button onclick="addToCart('ربع شيش طاووق', 190, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="meals">
+                 <!--<img src="https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=500&q=80" alt="أكل بدوي" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">بانية مشوي</h3>
+                        <span class="text-amber-600 font-bold text-lg">275 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">بانية مشوي</p>
+                    <button onclick="addToCart('بانية مشوي', 275, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="meals">
+                 <!--<img src="https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=500&q=80" alt="أكل بدوي" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">تلت ريش بتلو</h3>
+                        <span class="text-amber-600 font-bold text-lg">633 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">تلت ريش بتلو</p>
+                    <button onclick="addToCart('تلت ريش بتلو', 633, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="meals">
+                 <!--<img src="https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=500&q=80" alt="أكل بدوي" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">تلت ريش ضاني</h3>
+                        <span class="text-amber-600 font-bold text-lg">633 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">تلت ريش ضاني</p>
+                    <button onclick="addToCart('تلت ريش ضاني', 633, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="meals">
+                 <!--<img src="https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=500&q=80" alt="أكل بدوي" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">تلت سجق</h3>
+                        <span class="text-amber-600 font-bold text-lg">335 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">تلت سجق</p>
+                    <button onclick="addToCart('تلت سجق', 335, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="meals">
+                 <!--<img src="https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=500&q=80" alt="أكل بدوي" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">تلت كباب وكفتة</h3>
+                        <span class="text-amber-600 font-bold text-lg">390 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">تلت كباب وكفتة</p>
+                    <button onclick="addToCart('تلت كباب وكفتة', 390, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="meals">
+                 <!--<img src="https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=500&q=80" alt="أكل بدوي" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">تلت شيش وكفتة</h3>
+                        <span class="text-amber-600 font-bold text-lg">290 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">تلت شيش وكفتة</p>
+                    <button onclick="addToCart('تلت شيش وكفتة', 290, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="meals">
+                 <!--<img src="https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=500&q=80" alt="أكل بدوي" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">نص كيلو طرب</h3>
+                        <span class="text-amber-600 font-bold text-lg">535 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">نص كيلو طرب</p>
+                    <button onclick="addToCart('نص كيلو طرب', 535, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="meals">
+                 <!--<img src="https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=500&q=80" alt="أكل بدوي" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">نص فرخة مشوية</h3>
+                        <span class="text-amber-600 font-bold text-lg">250 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">نص فرخة مشوية</p>
+                    <button onclick="addToCart('نص فرخة مشوية', 250, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="meals">
+                 <!--<img src="https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=500&q=80" alt="أكل بدوي" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">نص فرخة شيش</h3>
+                        <span class="text-amber-600 font-bold text-lg">250 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">نص فرخة شيش</p>
+                    <button onclick="addToCart('نص فرخة شيش', 250, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="bedouin">
+                 <!--<img src="https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=500&q=80" alt="أكل بدوي" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">نفر لحم مندي</h3>
+                        <span class="text-amber-600 font-bold text-lg">590 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">نفر لحم مندي</p>
+                    <button onclick="addToCart('نفر لحم مندي', 590, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="bedouin">
+                 <!--<img src="https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=500&q=80" alt="أكل بدوي" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">نفر فراخ مندي</h3>
+                        <span class="text-amber-600 font-bold text-lg">295 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">نفر فراخ مندي</p>
+                    <button onclick="addToCart('نفر فراخ مندي', 295, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="bedouin">
+                 
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">مبكبكة لحمة</h3>
+                        <span class="text-amber-600 font-bold text-lg">295 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">مبكبكة لحمة</p>
+                    <button onclick="addToCart('مبكبكة لحمة', 295, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="bedouin">
+                <!--<img src="https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=500&q=80" alt="أكل بدوي" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">مبكبكة سجق</h3>
+                        <span class="text-amber-600 font-bold text-lg">280 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">مبكبكة سجق</p>
+                    <button onclick="addToCart('مبكبكة سجق', 280, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="bedouin">
+                 <!--<img src="https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=500&q=80" alt="أكل بدوي" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">هبرة جدو</h3>
+                        <span class="text-amber-600 font-bold text-lg">385 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">هبرة جدو</p>
+                    <button onclick="addToCart('هبرة جدو', 385, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="tawajeen">
+                <!--<img src="https://images.unsplash.com/photo-1541518763669-27fef04b14ea?auto=format&fit=crop&w=500&q=80" alt="طاجن" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">ملوخية</h3>
+                        <span class="text-amber-600 font-bold text-lg">70 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">ملوخية</p>
+                    <button onclick="addToCart('ملوخية', 70, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="tawajeen">
+                <!--<img src="https://images.unsplash.com/photo-1541518763669-27fef04b14ea?auto=format&fit=crop&w=500&q=80" alt="طاجن" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">بامية باللحمة</h3>
+                        <span class="text-amber-600 font-bold text-lg">290 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">بامية باللحمة</p>
+                    <button onclick="addToCart('بامية باللحمة', 290, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="tawajeen">
+                <!--<img src="https://images.unsplash.com/photo-1541518763669-27fef04b14ea?auto=format&fit=crop&w=500&q=80" alt="طاجن" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">بطاطس باللحمة</h3>
+                        <span class="text-amber-600 font-bold text-lg">285 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">بطاطس باللحمة</p>
+                    <button onclick="addToCart('بطاطس باللحمة', 285, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="tawajeen">
+                <!--<img src="https://images.unsplash.com/photo-1541518763669-27fef04b14ea?auto=format&fit=crop&w=500&q=80" alt="طاجن" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">عكاوي</h3>
+                        <span class="text-amber-600 font-bold text-lg">485 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">عكاوي</p>
+                    <button onclick="addToCart('عكاوي', 485, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="tawajeen">
+                <!--<img src="https://images.unsplash.com/photo-1541518763669-27fef04b14ea?auto=format&fit=crop&w=500&q=80" alt="طاجن" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">بصلية</h3>
+                        <span class="text-amber-600 font-bold text-lg">290 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">بصلية</p>
+                    <button onclick="addToCart('بصلية', 290, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="tawajeen">
+                <!--<img src="https://images.unsplash.com/photo-1541518763669-27fef04b14ea?auto=format&fit=crop&w=500&q=80" alt="طاجن" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">خضار باللحمة</h3>
+                        <span class="text-amber-600 font-bold text-lg">285 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">خضار باللحمة</p>
+                    <button onclick="addToCart('خضار باللحمة', 285, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="tawajeen">
+                <!--<img src="https://images.unsplash.com/photo-1541518763669-27fef04b14ea?auto=format&fit=crop&w=500&q=80" alt="طاجن" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">ورق عنب كوارع</h3>
+                        <span class="text-amber-600 font-bold text-lg">395 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">ورق عنب كوارع</p>
+                    <button onclick="addToCart('ورق عنب كوارع', 395, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="tawajeen">
+                <!--<img src="https://images.unsplash.com/photo-1541518763669-27fef04b14ea?auto=format&fit=crop&w=500&q=80" alt="طاجن" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">مسقعة لحمة</h3>
+                        <span class="text-amber-600 font-bold text-lg">330 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">مسقعة لحمة</p>
+                    <button onclick="addToCart('مسقعة لحمة', 330, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="tawajeen">
+                <!--<img src="https://images.unsplash.com/photo-1541518763669-27fef04b14ea?auto=format&fit=crop&w=500&q=80" alt="طاجن" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">مكرونة بشاميل فراخ</h3>
+                        <span class="text-amber-600 font-bold text-lg">199 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">مكرونة بشاميل فراخ</p>
+                    <button onclick="addToCart('مكرونة بشاميل فراخ', 199, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="tawajeen">
+                <!--<img src="https://images.unsplash.com/photo-1541518763669-27fef04b14ea?auto=format&fit=crop&w=500&q=80" alt="طاجن" class="w-full h-48 object-cover">-->
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">مكرونة بشاميل لحمة</h3>
+                        <span class="text-amber-600 font-bold text-lg">330 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">مكرونة بشاميل لحمة</p>
+                    <button onclick="addToCart('مكرونة بشاميل لحمة', 330, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="fataat">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">فتة سادة</h3>
+                        <span class="text-amber-600 font-bold text-lg">95 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">فتة سادة</p>
+                    <button onclick="addToCart('فتة سادة', 95, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="fataat">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">فتة لحمة</h3>
+                        <span class="text-amber-600 font-bold text-lg">299 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">فتة لحمة</p>
+                    <button onclick="addToCart('فتة لحمة', 299, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="fataat">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">فتة كوارع</h3>
+                        <span class="text-amber-600 font-bold text-lg">365 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">فتة كوارع</p>
+                    <button onclick="addToCart('فتة كوارع', 365, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="fataat">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">فتة موزة ضاني</h3>
+                        <span class="text-amber-600 font-bold text-lg">690 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">فتة موزة ضاني</p>
+                    <button onclick="addToCart('فتة موزة ضاني', 690, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="fataat">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">موزة بتلو مخلية بالفتة</h3>
+                        <span class="text-amber-600 font-bold text-lg">520 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">موزة بتلو مخلية بالفتة</p>
+                    <button onclick="addToCart('موزة بتلو مخلية بالفتة', 520, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="kids">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">ملوخية وفراخ</h3>
+                        <span class="text-amber-600 font-bold text-lg">240 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">مع كل وجبة اطفال ارز + مشروب عصير</p>
+                    <button onclick="addToCart('ملوخية وفراخ', 240, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="kids">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">بطاطس وكفتة</h3>
+                        <span class="text-amber-600 font-bold text-lg">240 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">مع كل وجبة اطفال ارز + مشروب عصير</p>
+                    <button onclick="addToCart('بطاطس وكفتة', 240, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="birds">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">نص بطة مع رز</h3>
+                        <span class="text-amber-600 font-bold text-lg">425 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">نص بطة مع رز</p>
+                    <button onclick="addToCart('نص بطة مع رز', 425, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="birds">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">حمام ارز</h3>
+                        <span class="text-amber-600 font-bold text-lg">220 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">حمام أرز</p>
+                    <button onclick="addToCart('حمام أرز', 220, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="birds">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">نص بطة مع محشي</h3>
+                        <span class="text-amber-600 font-bold text-lg">450 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">نص بطة مع محشي</p>
+                    <button onclick="addToCart('نص بطة مع محشي', 450, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="hawawshi">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">حواوشي جريل</h3>
+                        <span class="text-amber-600 font-bold text-lg">170 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">لحمة - فراخ - سجق</p>
+                    <button onclick="addToCart(' حواوشي جريل', 170, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="zal3a">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">ذلعة فراخ</h3>
+                        <span class="text-amber-600 font-bold text-lg">350 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">ذلعة فراخ</p>
+                    <button onclick="addToCart('ذلعة فراخ', 350, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="zal3a">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">ذلعة لحمة</h3>
+                        <span class="text-amber-600 font-bold text-lg">450 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">ذلعة لحمة</p>
+                    <button onclick="addToCart('ذلعة لحمة', 450, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="zal3a">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">ذلعة موزة</h3>
+                        <span class="text-amber-600 font-bold text-lg">675 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">ذلعة موزة</p>
+                    <button onclick="addToCart('ذلعة موزة', 675, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="tasaat">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">طاسة كبدة</h3>
+                        <span class="text-amber-600 font-bold text-lg">230 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">طاسة كبدة</p>
+                    <button onclick="addToCart(' طاسة كبدة', 250, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="tasaat">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">طاسة سجق</h3>
+                        <span class="text-amber-600 font-bold text-lg">250 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">طاسة سجق</p>
+                    <button onclick="addToCart(' طاسة سجق', 250, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="tasaat">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">طاسة لحمة</h3>
+                        <span class="text-amber-600 font-bold text-lg">320 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">طاسة لحمة</p>
+                    <button onclick="addToCart(' طاسة لحمة', 320, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="tasaat">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">طاسة مخاصي</h3>
+                        <span class="text-amber-600 font-bold text-lg">250 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">طاسة مخاصي</p>
+                    <button onclick="addToCart(' طاسة مخاصي', 250, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="tasaat">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">طاسة مكس</h3>
+                        <span class="text-amber-600 font-bold text-lg">475 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">طاسة مكس</p>
+                    <button onclick="addToCart(' طاسة مكس', 475, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="tasaat">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">طاسة مزاليكا</h3>
+                        <span class="text-amber-600 font-bold text-lg">180 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">طاسة مزاليكا</p>
+                    <button onclick="addToCart(' طاسة مزاليكا', 180, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="appetizers">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">محشي كرنب</h3>
+                        <span class="text-amber-600 font-bold text-lg">95 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">محشي كرنب</p>
+                    <button onclick="addToCart('محشي كرنب', 95, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="appetizers">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">ورق عنب</h3>
+                        <span class="text-amber-600 font-bold text-lg">99 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">ورق عنب</p>
+                    <button onclick="addToCart('ورق عنب', 99, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="appetizers">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">ممبار</h3>
+                        <span class="text-amber-600 font-bold text-lg">99 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">ممبار</p>
+                    <button onclick="addToCart('ممبار', 99, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="appetizers">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">محشي مشكل</h3>
+                        <span class="text-amber-600 font-bold text-lg">85 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">محشي مشكل</p>
+                    <button onclick="addToCart('محشي مشكل', 85, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="appetizers">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">سمبوسك مكس</h3>
+                        <span class="text-amber-600 font-bold text-lg">95 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">سمبوسك مكس</p>
+                    <button onclick="addToCart('سمبوسك مكس', 95, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="appetizers">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">رقاق باللحمة</h3>
+                        <span class="text-amber-600 font-bold text-lg">165 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">رقاق باللحمة</p>
+                    <button onclick="addToCart('رقاق باللحمة', 165, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="appetizers">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">بطاطس محمرة</h3>
+                        <span class="text-amber-600 font-bold text-lg">50 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">بطاطس محمرة</p>
+                    <button onclick="addToCart('بطاطس محمرة', 50, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="appetizers">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">سرفيس محشي</h3>
+                        <span class="text-amber-600 font-bold text-lg">220 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">سرفيس محشي</p>
+                    <button onclick="addToCart('سرفيس محشي', 220, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="soup">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900"> لسان عصفور</h3>
+                        <span class="text-amber-600 font-bold text-lg">45 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4"> لسان عصفور </p>
+                    <button onclick="addToCart(' لسان عصفور', 45, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="soup">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900"> كوارع مخلية</h3>
+                        <span class="text-amber-600 font-bold text-lg">175 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4"> كوارع مخلية </p>
+                    <button onclick="addToCart(' كوارع مخلية', 175, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="soup">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900"> كوارع سادة</h3>
+                        <span class="text-amber-600 font-bold text-lg">40 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4"> كوارع سادة</p>
+                    <button onclick="addToCart('كوارع سادة', 40, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="soup">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900"> شوربة حمام</h3>
+                        <span class="text-amber-600 font-bold text-lg">120 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4"> شوربة حمام</p>
+                    <button onclick="addToCart(' شوربة حمام', 120, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="rice">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">أرز شعرية</h3>
+                        <span class="text-amber-600 font-bold text-lg">60 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">أرز شعرية</p>
+                    <button onclick="addToCart('أرز شعرية', 60, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="rice">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">أرز ابيض</h3>
+                        <span class="text-amber-600 font-bold text-lg">60 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">أرز ابيض</p>
+                    <button onclick="addToCart('أرز ابيض', 60, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="rice">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">أرز بسمتي</h3>
+                        <span class="text-amber-600 font-bold text-lg">70 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">أرز بسمتي</p>
+                    <button onclick="addToCart('أرز بسمتي', 70, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="rice">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">أرز معمر بالقشطة</h3>
+                        <span class="text-amber-600 font-bold text-lg">150 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">أرز معمر بالقشطة</p>
+                    <button onclick="addToCart('أرز معمر بالقشطة', 150, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="salads">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">طماطم مخللة</h3>
+                        <span class="text-amber-600 font-bold text-lg">25 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">طماطم مخللة</p>
+                    <button onclick="addToCart('طماطم مخللة', 25, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="salads">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">بطاطس مخللة</h3>
+                        <span class="text-amber-600 font-bold text-lg">35 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">بطاطس مخللة</p>
+                    <button onclick="addToCart('بطاطس مخللة', 35, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="salads">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">دقوس</h3>
+                        <span class="text-amber-600 font-bold text-lg">40 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">دقوس</p>
+                    <button onclick="addToCart('دقوس', 40, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="salads">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">طرشي</h3>
+                        <span class="text-amber-600 font-bold text-lg">35 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">طرشي</p>
+                    <button onclick="addToCart('طرشي', 35, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="salads">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">بلدي</h3>
+                        <span class="text-amber-600 font-bold text-lg">30 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">بلدي</p>
+                    <button onclick="addToCart('بلدي', 30, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="salads">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">طحينة</h3>
+                        <span class="text-amber-600 font-bold text-lg">35 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">طحينة</p>
+                    <button onclick="addToCart('طحينة', 35, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="salads">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">بابا غنوج</h3>
+                        <span class="text-amber-600 font-bold text-lg">35 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">بابا غنوج</p>
+                    <button onclick="addToCart('بابا غنوج', 35, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="salads">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">بتنجان مخلل</h3>
+                        <span class="text-amber-600 font-bold text-lg">35 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">بتنجان مخلل</p>
+                    <button onclick="addToCart('بتنجان مخلل', 35, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="hot-drinks">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">شاي فتلة</h3>
+                        <span class="text-amber-600 font-bold text-lg">35 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">شاي فتلة</p>
+                    <button onclick="addToCart('شاي فتلة', 35, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="hot-drinks">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">شاي براد</h3>
+                        <span class="text-amber-600 font-bold text-lg">55 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">شاي براد</p>
+                    <button onclick="addToCart('شاي براد', 55, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="hot-drinks">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">شاي اخضر</h3>
+                        <span class="text-amber-600 font-bold text-lg">35 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">شاي اخضر</p>
+                    <button onclick="addToCart('شاي اخضر', 35, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="hot-drinks">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">قهوة تركي سنجل</h3>
+                        <span class="text-amber-600 font-bold text-lg">45 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">قهوة تركي سنجل</p>
+                    <button onclick="addToCart('قهوة تركي سنجل', 45, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="hot-drinks">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">قهوة تركي دبل</h3>
+                        <span class="text-amber-600 font-bold text-lg">55 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">قهوة تركي دبل</p>
+                    <button onclick="addToCart('قهوة تركي دبل', 55, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="hot-drinks">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">قهوة فرنساوي</h3>
+                        <span class="text-amber-600 font-bold text-lg">50 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">قهوة فرنساوي</p>
+                    <button onclick="addToCart('قهوة فرنساوي', 50, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="hot-drinks">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">اسبريسو سنجل</h3>
+                        <span class="text-amber-600 font-bold text-lg">50 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">اسبريسو سنجل</p>
+                    <button onclick="addToCart('اسبريسو سنجل', 50, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="hot-drinks">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">اسبريسو دبل</h3>
+                        <span class="text-amber-600 font-bold text-lg">60 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">اسبريسو دبل</p>
+                    <button onclick="addToCart('اسبريسو دبل', 60, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="hot-drinks">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">كابتشينو</h3>
+                        <span class="text-amber-600 font-bold text-lg">65 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">كابتشينو</p>
+                    <button onclick="addToCart('كابتشينو', 65, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="feteer">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">نص فطيرة</h3>
+                        <span class="text-amber-600 font-bold text-lg">175 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">عسل أسود - عسل أبيض - مربي - جبنة قديمة</p>
+                    <button onclick="addToCart('نص فطيرة', 175, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="feteer">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900"> فطيرة كبيرة</h3>
+                        <span class="text-amber-600 font-bold text-lg">320 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">عسل أسود - عسل أبيض - مربي - جبنة قديمة</p>
+                    <button onclick="addToCart('فطيرة كبيرة', 320, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="cold-drinks">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">مانجا</h3>
+                        <span class="text-amber-600 font-bold text-lg">65 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">مانجا</p>
+                    <button onclick="addToCart('مانجا', 65, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+             <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="cold-drinks">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">فراولة</h3>
+                        <span class="text-amber-600 font-bold text-lg">65 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">فراولة</p>
+                    <button onclick="addToCart('فراولة', 65, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+             <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="cold-drinks">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">برتقال</h3>
+                        <span class="text-amber-600 font-bold text-lg">60 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">برتقال</p>
+                    <button onclick="addToCart('برتقال', 60, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+             <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="cold-drinks">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">ليمون</h3>
+                        <span class="text-amber-600 font-bold text-lg">60 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">ليمون</p>
+                    <button onclick="addToCart('ليمون', 60, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+             <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="cold-drinks">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">ليمون نعناع</h3>
+                        <span class="text-amber-600 font-bold text-lg">60 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">ليمون نعناع</p>
+                    <button onclick="addToCart('ليمون نعناع', 60, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+             <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="cold-drinks">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">مشروبات غازية</h3>
+                        <span class="text-amber-600 font-bold text-lg">35 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">مشروبات غازية</p>
+                    <button onclick="addToCart('مشروبات غازية', 35, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+
+             <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="cold-drinks">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">مياة صغيرة</h3>
+                        <span class="text-amber-600 font-bold text-lg">20 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">مياة صغيرة</p>
+                    <button onclick="addToCart('مياة صغيرة', 20, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 item-card" data-category="desserts">
+                <div class="p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">كنافة</h3>
+                        <span class="text-amber-600 font-bold text-lg">200 ج.م</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">كنافة</p>
+                    <button onclick="addToCart('كنافة', 200, '', '')" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-cart-plus"></i> أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="p-5 border-b bg-blue-900 text-white flex justify-between items-center">
+            <h3 class="text-xl font-bold flex items-center gap-2">
+                <i class="fas fa-shopping-cart"></i> سلة طلباتك
+            </h3>
+            <button onclick="toggleCart()" class="text-white hover:text-amber-400 text-2xl"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <div id="cart-items" class="flex-1 overflow-y-auto p-5 space-y-4">
+            <p class="text-gray-500 text-center py-8" id="empty-cart-msg">السلة فارغة حالياً. ابدأ بإضافة وجباتك المفضلة!</p>
+        </div>
+
+        <div class="p-5 border-t bg-gray-50 space-y-4">
+            <div class="flex justify-between font-bold text-lg text-gray-900">
+                <span>إجمالي الطلب:</span>
+                <span id="cart-total">0 ج.م</span>
+            </div>
+            
+            <div id="checkout-form-container" class="hidden space-y-3 pt-3 border-t">
+                <h4 class="font-bold text-sm text-blue-900">بيانات التوصيل والدفع:</h4>
+                <input type="text" id="cust-name" placeholder="الاسم بالكامل" class="w-full p-2 border rounded text-sm outline-none focus:border-amber-500">
+                <input type="tel" id="cust-phone" placeholder="رقم الموبايل (عليه واتساب)" class="w-full p-2 border rounded text-sm outline-none focus:border-amber-500">
+                <select id="cust-region" onchange="updateDeliveryCost()" class="w-full p-2 border rounded text-sm outline-none focus:border-amber-500">
+                    <option value="" disabled selected>اختر منطقة التوصيل</option>
+                    <option value="30">المنطقة الأولى (+30 ج.م توصيل)</option>
+                    <option value="40">المنطقة الثانية (+40 ج.م توصيل)</option>
+                    <option value="50">المنطقة الثالثة (+50 ج.م توصيل)</option>
+                </select>
+                <input type="text" id="cust-address" placeholder="العنوان بالتفصيل (الشارع، الدور، الشقة)" class="w-full p-2 border rounded text-sm outline-none focus:border-amber-500">
+                
+                <div class="bg-white p-3 rounded border space-y-2">
+                    <span class="text-xs font-bold text-gray-600 block">طريقة الدفع:</span>
+                    <label class="inline-flex items-center ml-4 text-xs"><input type="radio" name="payment-method" value="cash" checked class="ml-1 text-amber-500"> كاش عند الاستلام</label>
+                    <label class="inline-flex items-center text-xs"><input type="radio" name="payment-method" value="online" class="ml-1 text-amber-500"> بطاقة ائتمان / ميزة أونلاين</label>
+                </div>
+            </div>
+
+            <button id="checkout-btn" onclick="proceedToCheckout()" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 rounded-lg shadow transition text-center block">
+                تأكيد ومتابعة الطلب
+            </button>
+        </div>
+    </div>
+
+    <footer id="contact" class="bg-gray-900 text-white pt-12 pb-6 border-t-4 border-amber-500">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div>
+                <h4 class="text-xl font-bold mb-4 text-amber-500">عن المطعم</h4>
+                <p class="text-gray-400 text-sm leading-relaxed">نحن نقدم أجود أنواع المأكولات الطازجة والمحضرة بأيدي أمهر الطهاة المحترفين. جودتنا هي سر تميزنا وراحتكم هي هدفنا الأساسي.</p>
+            </div>
+            <div>
+                <h4 class="text-xl font-bold mb-4 text-amber-500">مواعيد العمل والفروع</h4>
+                <p class="text-gray-400 text-sm mb-2"><i class="fas fa-clock text-amber-500 ml-2"></i> يومياً من الساعة 12:00 ظهراً حتى 02:00 صباحاً</p>
+                <p class="text-gray-400 text-sm"><i class="fas fa-map-marker-alt text-amber-500 ml-2"></i> القاهرة، مصر (ويمكنك الطلب لأي مكان محيط)</p>
+            </div>
+            <div>
+                <h4 class="text-xl font-bold mb-4 text-amber-500">روابط سريعة</h4>
+                <div class="flex gap-4 text-2xl">
+                    <a href="https://www.facebook.com/gedovillage/?locale=ar_AR" class="text-gray-400 hover:text-blue-500 transition"><i class="fab fa-facebook"></i></a>
+                    <a href="https://www.instagram.com/gedovillage/?hl=ar" class="text-gray-400 hover:text-pink-500 transition"><i class="fab fa-instagram"></i></a>
+                    <a href="https://wtsi.me/201116662404" class="text-gray-400 hover:text-green-500 transition"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center text-gray-500 text-xs border-t border-gray-800 pt-6">
+            جميع الحقوق محفوظة &copy; 2026 | تم التصميم باحترافية للمطعم
+        </div>
+    </footer>
+
+    <script>
+        let cart = [];
+        let deliveryCost = 0;
+
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            sidebar.classList.toggle('translate-x-full');
+        }
+
+        function filterMenu(category) {
+            // تحديث التابات النشطة
+            const tabs = document.querySelectorAll('.menu-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // لتجنب الخطأ في حالة الـ scroll أو الضغط المباشر
+            if(event && event.target) {
+                event.target.classList.add('active');
+            }
+
+            // فلترة الكروت
+            const cards = document.querySelectorAll('.item-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function addToCart(name, price, sizeRadioName, extraCheckName) {
+            let finalName = name;
+            let finalPrice = price;
+
+            // استخراج الحجم المختار
+            if (sizeRadioName) {
+                const sizeRadio = document.querySelector(`input[name="${sizeRadioName}"]:checked`);
+                if (sizeRadio) {
+                    finalName += ` (${sizeRadio.value})`;
+                    if (sizeRadio.value.includes('+50')) finalPrice += 50;
+                    if (sizeRadio.value.includes('+60')) finalPrice += 60;
+                }
+            }
+
+            // استخراج الإضافات المضافة
+            if (extraCheckName) {
+                const extras = document.querySelectorAll(`input[name="${extraCheckName}"]:checked`);
+                extras.forEach(extra => {
+                    finalName += ` + ${extra.value}`;
+                    if (extra.value.includes('+15')) finalPrice += 15;
+                });
+            }
+
+            // إضافة للسلة
+            cart.push({ name: finalName, price: finalPrice });
+            updateCartUI();
+            
+            // فتح السلة تلقائياً لتأكيد الإضافة للعميل
+            const sidebar = document.getElementById('cart-sidebar');
+            sidebar.classList.remove('translate-x-full');
+        }
+
+        function updateDeliveryCost() {
+            const regionSelect = document.getElementById('cust-region');
+            deliveryCost = parseInt(regionSelect.value) || 0;
+            updateCartUI();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-count').innerText = cart.length;
+            const cartItemsContainer = document.getElementById('cart-items');
+            const emptyMsg = document.getElementById('empty-cart-msg');
+            
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p class="text-gray-500 text-center py-8" id="empty-cart-msg">السلة فارغة حالياً. ابدأ بإضافة وجباتك المفضلة!</p>';
+                document.getElementById('cart-total').innerText = '0 ج.م';
+                document.getElementById('checkout-form-container').classList.add('hidden');
+                return;
+            }
+
+            if (emptyMsg) emptyMsg.remove();
+            cartItemsContainer.innerHTML = '';
+
+            let subtotal = 0;
+            cart.forEach((item, index) => {
+                subtotal += item.price;
+                cartItemsContainer.innerHTML += `
+                    <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-100">
+                        <div>
+                            <h5 class="font-bold text-sm text-gray-900">${item.name}</h5>
+                            <span class="text-xs text-amber-600 font-semibold">${item.price} ج.م</span>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700 text-sm"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                `;
+            });
+
+            let total = subtotal + deliveryCost;
+            document.getElementById('cart-total').innerText = `${total} ج.م ` + (deliveryCost > 0 ? `(شامل التوصيل ${deliveryCost} ج.م)` : '');
+        }
+
+        function proceedToCheckout() {
+            const formContainer = document.getElementById('checkout-form-container');
+            
+            if (cart.length === 0) {
+                alert('من فضلك أضف بعض الوجبات للسلة أولاً');
+                return;
+            }
+
+            if (formContainer.classList.contains('hidden')) {
+                // إظهار فورم البيانات في الخطوة الأولى
+                formContainer.classList.remove('hidden');
+                document.getElementById('checkout-btn').innerText = 'إرسال الطلب النهائي';
+            } else {
+                // التحقق من البيانات وإرسال الطلب في الخطوة الثانية
+                const name = document.getElementById('cust-name').value;
+                const phone = document.getElementById('cust-phone').value;
+                const region = document.getElementById('cust-region').value;
+                const address = document.getElementById('cust-address').value;
+                const payment = document.querySelector('input[name="payment-method"]:checked').value;
+
+                if (!name || !phone || !region || !address) {
+                    alert('من فضلك أكمل جميع البيانات المطلوبة للتوصيل');
+                    return;
+                }
+
+                // تجميع نص الطلب لإرساله للواتساب أو الكاشير كمحاكاة ذكية للسيستم بدون تعقيد سيرفرات
+                let orderText = `*طلب دليفري جديد من الموقع*\n\n`;
+                orderText += `*العميل:* ${name}\n`;
+                orderText += `*الموبايل:* ${phone}\n`;
+                orderText += `*العنوان:* ${address}\n`;
+                orderText += `*طريقة الدفع:* ${payment === 'cash' ? 'كاش عند الاستلام' : 'أونلاين بالفيزا'}\n\n`;
+                orderText += `*الطلبات:*\n`;
+                
+                cart.forEach((item, i) => {
+                    orderText += `${i+1}. ${item.name} -> ${item.price} ج.م\n`;
+                });
+                
+                orderText += `\n*الإجمالي الشامل:* ${document.getElementById('cart-total').innerText}`;
+
+                // إذا كان الدفع أونلاين، نقوم بتوجيهه أو محاكاة بوابة الدفع
+                if (payment === 'online') {
+                    alert('جاري توجيهك بأمان لبوابة الدفع الإلكتروني (Paymob/Fawry)... الطلب مسجل لدينا كمعلق لحين الدفع.');
+                }
+
+                // توجيه فوري للواتساب الخاص بالمطعم أو استقبال الطلب بسلاسة فائقة
+                const whatsappNumber = "201000000000"; // يتم استبداله برقم المطعم الحقيقي
+                const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(orderText)}`;
+                
+                alert('تم تسجيل طلبك بنجاح! سيتم فتح واتساب لإرسال تفاصيل طلبك للمطبخ فوراً لمباشرة التجهيز.');
+                window.open(whatsappUrl, '_blank');
+                
+                // تصفير السلة
+                cart = [];
+                updateCartUI();
+                toggleCart();
+                document.getElementById('cust-name').value = '';
+                document.getElementById('cust-phone').value = '';
+                document.getElementById('cust-address').value = '';
+            }
+        }
+    </script>
+</body>
+</html>
