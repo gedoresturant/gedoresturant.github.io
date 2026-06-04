@@ -1648,7 +1648,7 @@
                 });
             }
 
-            // إضافة للسلة
+           // إضافة للسلة
             cart.push({ name: finalName, price: finalPrice });
             updateCartUI();
             
@@ -1697,8 +1697,26 @@
                 `;
             });
 
-            let total = subtotal + deliveryCost;
-            document.getElementById('cart-total').innerText = `${total} ج.م ` + (deliveryCost > 0 ? `(شامل التوصيل ${deliveryCost} ج.م)` : '');
+            // --- حسابات الضريبة والإجمالي الجديد ---
+            let tax = subtotal * 0.14; // حساب الـ 14% ضريبة القيمة المضافة
+            let total = subtotal + tax + deliveryCost; // الإجمالي الشامل (الوجبات + الضريبة + التوصيل)
+
+            // تحديث النص في السلة ليظهر تفصيلي للعميل
+            document.getElementById('cart-total').innerHTML = `
+                <div class="text-xs text-gray-500 flex justify-between mb-1">
+                    <span>المجموع قبل الضريبة:</span> <span>${subtotal.toFixed(2)} ج.م</span>
+                </div>
+                <div class="text-xs text-gray-500 flex justify-between mb-1">
+                    <span>ضريبة القيمة المضافة (14%):</span> <span>${tax.toFixed(2)} ج.م</span>
+                </div>
+                ${deliveryCost > 0 ? `
+                <div class="text-xs text-gray-500 flex justify-between mb-1">
+                    <span>مصاريف التوصيل:</span> <span>${deliveryCost.toFixed(2)} ج.م</span>
+                </div>` : ''}
+                <div class="border-t border-gray-200 mt-2 pt-2 text-sm font-bold text-gray-900 flex justify-between">
+                    <span>الإجمالي الشامل:</span> <span>${total.toFixed(2)} ج.م</span>
+                </div>
+            `;
         }
 
         function proceedToCheckout() {
@@ -1726,7 +1744,13 @@
                     return;
                 }
 
-                // تجميع نص الطلب لإرساله للواتساب أو الكاشير كمحاكاة ذكية للسيستم بدون تعقيد سيرفرات
+                // حساب القيم للرسالة مجدداً
+                let subtotal = 0;
+                cart.forEach(item => subtotal += item.price);
+                let tax = subtotal * 0.14;
+                let total = subtotal + tax + deliveryCost;
+
+                // تجميع نص الطلب المعدل للواتساب
                 let orderText = `*طلب دليفري جديد من الموقع*\n\n`;
                 orderText += `*العميل:* ${name}\n`;
                 orderText += `*الموبايل:* ${phone}\n`;
@@ -1738,7 +1762,13 @@
                     orderText += `${i+1}. ${item.name} -> ${item.price} ج.م\n`;
                 });
                 
-                orderText += `\n*الإجمالي الشامل:* ${document.getElementById('cart-total').innerText}`;
+                orderText += `\n-----------------------\n`;
+                orderText += `*المجموع الأساسي:* ${subtotal.toFixed(2)} ج.م\n`;
+                orderText += `*الضريبة (14%):* ${tax.toFixed(2)} ج.م\n`;
+                if(deliveryCost > 0) {
+                    orderText += `*التوصيل:* ${deliveryCost.toFixed(2)} ج.م\n`;
+                }
+                orderText += `*الإجمالي الشامل:* ${total.toFixed(2)} ج.م`;
 
                 // إذا كان الدفع أونلاين، نقوم بتوجيهه أو محاكاة بوابة الدفع
                 if (payment === 'online') {
@@ -1746,7 +1776,7 @@
                 }
 
                 // توجيه فوري للواتساب الخاص بالمطعم أو استقبال الطلب بسلاسة فائقة
-                const whatsappNumber = "201092101182"; // يتم استبداله برقم المطعم الحقيقي
+                const whatsappNumber = "201000000000"; // يتم استبداله برقم المطعم الحقيقي
                 const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(orderText)}`;
                 
                 alert('تم تسجيل طلبك بنجاح! سيتم فتح واتساب لإرسال تفاصيل طلبك للمطبخ فوراً لمباشرة التجهيز.');
