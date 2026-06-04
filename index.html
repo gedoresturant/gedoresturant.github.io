@@ -1591,9 +1591,11 @@
             </div>
         </div>
         <div class="text-center text-gray-500 text-xs border-t border-gray-800 pt-6">
-            جميع الحقوق محفوظة &copy; 2026 | تم التصميم باحترافية للمطعم
+            جميع الحقوق محفوظة &copy; 2026 | OneTouch
         </div>
     </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <script>
         let cart = [];
@@ -1605,16 +1607,13 @@
         }
 
         function filterMenu(category) {
-            // تحديث التابات النشطة
             const tabs = document.querySelectorAll('.menu-tab');
             tabs.forEach(tab => tab.classList.remove('active'));
             
-            // لتجنب الخطأ في حالة الـ scroll أو الضغط المباشر
             if(event && event.target) {
                 event.target.classList.add('active');
             }
 
-            // فلترة الكروت
             const cards = document.querySelectorAll('.item-card');
             cards.forEach(card => {
                 if (category === 'all' || card.getAttribute('data-category') === category) {
@@ -1629,7 +1628,6 @@
             let finalName = name;
             let finalPrice = price;
 
-            // استخراج الحجم المختار
             if (sizeRadioName) {
                 const sizeRadio = document.querySelector(`input[name="${sizeRadioName}"]:checked`);
                 if (sizeRadio) {
@@ -1639,7 +1637,6 @@
                 }
             }
 
-            // استخراج الإضافات المضافة
             if (extraCheckName) {
                 const extras = document.querySelectorAll(`input[name="${extraCheckName}"]:checked`);
                 extras.forEach(extra => {
@@ -1648,11 +1645,9 @@
                 });
             }
 
-           // إضافة للسلة
             cart.push({ name: finalName, price: finalPrice });
             updateCartUI();
             
-            // فتح السلة تلقائياً لتأكيد الإضافة للعميل
             const sidebar = document.getElementById('cart-sidebar');
             sidebar.classList.remove('translate-x-full');
         }
@@ -1697,11 +1692,9 @@
                 `;
             });
 
-            // --- حسابات الضريبة والإجمالي الجديد ---
-            let tax = subtotal * 0.14; // حساب الـ 14% ضريبة القيمة المضافة
-            let total = subtotal + tax + deliveryCost; // الإجمالي الشامل (الوجبات + الضريبة + التوصيل)
+            let tax = subtotal * 0.14; 
+            let total = subtotal + tax + deliveryCost; 
 
-            // تحديث النص في السلة ليظهر تفصيلي للعميل
             document.getElementById('cart-total').innerHTML = `
                 <div class="text-xs text-gray-500 flex justify-between mb-1">
                     <span>المجموع قبل الضريبة:</span> <span>${subtotal.toFixed(2)} ج.م</span>
@@ -1714,7 +1707,7 @@
                     <span>مصاريف التوصيل:</span> <span>${deliveryCost.toFixed(2)} ج.م</span>
                 </div>` : ''}
                 <div class="border-t border-gray-200 mt-2 pt-2 text-sm font-bold text-gray-900 flex justify-between">
-                    <span>الإجمالي الشامل:</span> <span>${total.toFixed(2)} ج.م</span>
+                    <span>الإجمالي الشامل:</span> <span>${total.toFixed(2)} ج.m</span>
                 </div>
             `;
         }
@@ -1728,11 +1721,9 @@
             }
 
             if (formContainer.classList.contains('hidden')) {
-                // إظهار فورم البيانات في الخطوة الأولى
                 formContainer.classList.remove('hidden');
                 document.getElementById('checkout-btn').innerText = 'إرسال الطلب النهائي';
             } else {
-                // التحقق من البيانات وإرسال الطلب في الخطوة الثانية
                 const name = document.getElementById('cust-name').value;
                 const phone = document.getElementById('cust-phone').value;
                 const region = document.getElementById('cust-region').value;
@@ -1744,13 +1735,12 @@
                     return;
                 }
 
-                // حساب القيم للرسالة مجدداً
                 let subtotal = 0;
                 cart.forEach(item => subtotal += item.price);
                 let tax = subtotal * 0.14;
                 let total = subtotal + tax + deliveryCost;
 
-                // تجميع نص الطلب المعدل للواتساب
+                // تحضير نص الواتساب مسبقاً
                 let orderText = `*طلب دليفري جديد من الموقع*\n\n`;
                 orderText += `*العميل:* ${name}\n`;
                 orderText += `*الموبايل:* ${phone}\n`;
@@ -1770,27 +1760,129 @@
                 }
                 orderText += `*الإجمالي الشامل:* ${total.toFixed(2)} ج.م`;
 
-                // إذا كان الدفع أونلاين، نقوم بتوجيهه أو محاكاة بوابة الدفع
                 if (payment === 'online') {
-                    alert('جاري توجيهك بأمان لبوابة الدفع الإلكتروني (Paymob/Fawry)... الطلب مسجل لدينا كمعلق لحين الدفع.');
+                    alert('جاري تسجيل الطلب وتوجيهك لبوابة الدفع الإلكتروني...');
                 }
 
-                // توجيه فوري للواتساب الخاص بالمطعم أو استقبال الطلب بسلاسة فائقة
-                const whatsappNumber = "201092101182"; // يتم استبداله برقم المطعم الحقيقي
+                const whatsappNumber = "201092101182"; // استبدله برقمك الحقيقي
                 const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(orderText)}`;
-                
-                alert('تم تسجيل طلبك بنجاح! سيتم فتح واتساب لإرسال تفاصيل طلبك للمطبخ فوراً لمباشرة التجهيز.');
-                window.open(whatsappUrl, '_blank');
-                
-                // تصفير السلة
-                cart = [];
-                updateCartUI();
-                toggleCart();
-                document.getElementById('cust-name').value = '';
-                document.getElementById('cust-phone').value = '';
-                document.getElementById('cust-address').value = '';
+
+                // إظهار مؤشر تحميل بسيط للعميل لحين توليد الفاتورة كصورة
+                document.getElementById('checkout-btn').innerText = 'جاري إصدار الشيك...';
+                document.getElementById('checkout-btn').disabled = true;
+
+                // 1. بناء عنصر الـ HTML الفاتورة بشكل خفي تماماً ومطابق للهوية
+                const receiptTempDiv = document.createElement('div');
+                receiptTempDiv.id = 'temp-receipt-capture';
+                receiptTempDiv.style = 'position: absolute; left: -9999px; width: 350px; padding: 25px 20px; background: #fff; font-family: "Cairo", sans-serif; text-align: right; direction: rtl;';
+
+                let receiptItemsHtml = '';
+                cart.forEach((item, i) => {
+                    receiptItemsHtml += `
+                        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; border-bottom: 1px dashed #e5e7eb; padding-bottom: 6px; font-weight: 600;">
+                            <span>${i+1}. ${item.name}</span>
+                            <span style="color: #b45309;">${item.price.toFixed(2)} ج.م</span>
+                        </div>
+                    `;
+                });
+
+                receiptTempDiv.innerHTML = `
+                    <div style="text-align: center; margin-bottom: 15px;">
+                        <h2 style="margin: 0; color: #1e3a8a; font-size: 20px; font-weight: bold;">قرية جدو 16015</h2>
+                        <p style="margin: 4px 0; font-size: 12px; color: #6b7280;">أكل فلاحي على أصوله</p>
+                        <div style="border-top: 2px solid #1e3a8a; margin: 10px 0;"></div>
+                        <span style="font-weight: bold; background: #f3f4f6; padding: 3px 10px; border-radius: 12px; font-size: 12px;">فاتورة تأكيد الطلب</span>
+                    </div>
+                    <div style="font-size: 12px; margin-bottom: 15px; color: #374151; line-height: 1.7; background: #fafafa; padding: 10px; border-radius: 6px;">
+                        <strong>العميل:</strong> ${name}<br>
+                        <strong>الموبايل:</strong> ${phone}<br>
+                        <strong>العنوان:</strong> ${address}<br>
+                        <strong>طريقة الدفع:</strong> ${payment === 'cash' ? 'كاش عند الاستلام' : 'أونلاين بالفيزا'}<br>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong style="font-size: 13px; color: #1e3a8a; display: block; margin-bottom: 5px;">تفاصيل الوجبات:</strong>
+                        ${receiptItemsHtml}
+                    </div>
+                    <div style="border-top: 1px solid #1e3a8a; padding-top: 8px; font-size: 13px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 4px; color: #4b5563;">
+                            <span>المجموع قبل الضريبة:</span> <span>${subtotal.toFixed(2)} ج.م</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 4px; color: #4b5563;">
+                            <span>ضريبة القيمة المضافة (14%):</span> <span>${tax.toFixed(2)} ج.م</span>
+                        </div>
+                        ${deliveryCost > 0 ? `
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 4px; color: #4b5563;">
+                            <span>مصاريف التوصيل:</span> <span>${deliveryCost.toFixed(2)} ج.م</span>
+                        </div>` : ''}
+                        <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 15px; margin-top: 8px; border-top: 2px solid #1e3a8a; padding-top: 8px; color: #1e3a8a;">
+                            <span>الإجمالي الشامل:</span> <span>${total.toFixed(2)} ج.م</span>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px; font-size: 10px; color: #9ca3af; border-top: 1px dashed #e5e7eb; pt-10;">
+                        شكراً لاختياركم قرية جدو | تم الطلب عبر الموقع الإلكتروني
+                    </div>
+                `;
+
+                document.body.appendChild(receiptTempDiv);
+
+                // 2. التقاط الفاتورة وتحويلها لـ Image
+                html2canvas(document.getElementById('temp-receipt-capture'), { scale: 2 }).then(canvas => {
+                    const imageData = canvas.toDataURL("image/png");
+                    document.body.removeChild(receiptTempDiv); // تنظيف الصفحة
+                    
+                    // 3. بناء المودال المنبثق لعرض الصورة وتوفير زر التحميل والمتابعة
+                    const modalDiv = document.createElement('div');
+                    modalDiv.id = 'receipt-modal';
+                    modalDiv.style = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); display: flex; justify-content: center; align-items: center; z-index: 10000; direction: rtl; padding: 15px;';
+                    modalDiv.innerHTML = `
+                        <div style="background: #fff; padding: 20px; border-radius: 16px; text-align: center; max-width: 400px; width: 100%; max-height: 90vh; overflow-y: auto; font-family: 'Cairo', sans-serif; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
+                            <div style="color: #10b981; font-size: 40px; margin-bottom: 10px;"><i class="fas fa-check-circle"></i></div>
+                            <h3 style="margin-top: 0; color: #1e3a8a; font-size: 20px; font-weight: bold; margin-bottom: 4px;">تم تأكيد طلبك بنجاح! 🎉</h3>
+                            <p style="font-size: 13px; color: #6b7280; margin-bottom: 15px;">تم توليد شيك الطلب الحصري لك، يمكنك حفظه كصورة:</p>
+                            
+                            <div style="background: #f3f4f6; padding: 10px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: center;">
+                                <img src="${imageData}" style="max-width: 100%; height: auto; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);" alt="شيك الطلب">
+                            </div>
+                            
+                            <a href="${imageData}" download="Gedo-Receipt-${phone}.png" style="background: #b45309; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; display: block; margin-bottom: 10px; font-size: 14px; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#92400e'" onmouseout="this.style.backgroundColor='#b45309'">
+                                <i class="fas fa-download ml-2"></i> تحميل الفاتورة كصورة
+                            </a>
+                            
+                            <button onclick="finaliseOrderAndOpenWhatsApp('${whatsappUrl}')" style="background: #1e3a8a; color: #fff; border: 0; padding: 10px 20px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; font-size: 14px; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#1e3b8b'" onmouseout="this.style.backgroundColor='#1e3a8a'">
+                                إغلاق ومتابعة للواتساب <i class="fas fa-chevron-left mr-1"></i>
+                            </button>
+                        </div>
+                    `;
+                    document.body.appendChild(modalDiv);
+
+                    // إعادة تهيئة زرار الكاشوت الأساسي بالموقع
+                    document.getElementById('checkout-btn').innerText = 'إرسال الطلب النهائي';
+                    document.getElementById('checkout-btn').disabled = false;
+                }).catch(err => {
+                    console.error("خطأ في توليد الشيك:", err);
+                    // في حال حدوث أي خطأ نادر في الـ Canvas، يتم التوجيه مباشرة للواتساب دون تعطيل العميل
+                    window.open(whatsappUrl, '_blank');
+                });
             }
         }
+
+        // دالة إنهاء الطلب بعد التعامل مع الشيك والصورة
+        window.finaliseOrderAndOpenWhatsApp = function(url) {
+            // 1. حذف نافذة المودال المنبثقة
+            const modal = document.getElementById('receipt-modal');
+            if(modal) document.body.removeChild(modal);
+
+            // 2. تصفير السلة وتنظيف الحقول وتحديث الواجهة
+            cart = [];
+            updateCartUI();
+            toggleCart();
+            document.getElementById('cust-name').value = '';
+            document.getElementById('cust-phone').value = '';
+            document.getElementById('cust-address').value = '';
+
+            // 3. فتح الواتساب في نافذة جديدة لإرسال الفاتورة النصية للمطبخ
+            window.open(url, '_blank');
+        };
     </script>
 </body>
 </html>
