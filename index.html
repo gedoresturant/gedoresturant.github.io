@@ -1784,7 +1784,7 @@
             syncCardCounters();
         }
 
-        // كود المزامنة لبناء وعرض عداد ( + و - ) تفاعلي مباشرةً تحت كل وجبة بالصفحة
+        // كود المزامنة لبناء وعرض عداد ( + و - ) تفاعلي مباشرةً تحت كل وجبة بالصفحة (تم تحديثه لحل مشكلة الشوربة والطاسات)
         function syncCardCounters() {
             const cards = document.querySelectorAll('.item-card');
             cards.forEach(card => {
@@ -1798,7 +1798,8 @@
                     onclickText = mainBtn.getAttribute('data-stored-onclick');
                 }
                 
-                const matches = onclickText.match(/addToCart\s*\(\s*'([^']+)'/);
+                // تعديل التعبير النمطي ليدعم جميع أنواع علامات التنصيص والمساحات (علاج مشكلة الشوربة والطاسات)
+                const matches = onclickText.match(/addToCart\s*\(\s*['"`]([^'"`]+)['"`]/);
                 if (!matches || !matches[1]) return;
                 const baseItemName = matches[1].trim();
 
@@ -1808,8 +1809,13 @@
                     mainBtn.classList.add('original-add-btn');
                 }
 
-                // فحص ما إذا كانت الوجبة (أو مشتقاتها بالحجم والإضافات) موجودة بالسلة حالياً
-                let cartItems = cart.filter(item => item.name === baseItemName || item.name.startsWith(baseItemName + " (") || item.name.startsWith(baseItemName + " +"));
+                // فحص مرن يدعم مطابقة الاسم بدقة في السلة حتى لو كانت الوجبة مضاف لها أحجام أو إضافات
+                let cartItems = cart.filter(item => {
+                    let trimmedCartName = item.name.trim();
+                    return trimmedCartName === baseItemName || 
+                           trimmedCartName.startsWith(baseItemName + " (") || 
+                           trimmedCartName.startsWith(baseItemName + " +");
+                });
                 let totalQtyForCard = cartItems.reduce((sum, item) => sum + item.qty, 0);
 
                 let existingControls = card.querySelector('.qty-controls-wrapper');
@@ -1819,12 +1825,11 @@
                     mainBtn.style.display = 'none';
                     mainBtn.removeAttribute('onclick');
 
+                    let targetUniqueName = cartItems[cartItems.length - 1].name;
+
                     if (!existingControls) {
                         const qtyControls = document.createElement('div');
                         qtyControls.className = 'qty-controls-wrapper flex items-center justify-between bg-gray-100 rounded-lg p-1 border border-gray-200 w-full mt-2';
-                        
-                        // نستخدم اسم آخر وجبة تم التعامل معها لربط عمليات العداد بدقة
-                        let targetUniqueName = cartItems[cartItems.length - 1].name;
                         
                         qtyControls.innerHTML = `
                             <button onclick="changeQtyFromCard('${targetUniqueName}', -1)" class="bg-amber-500 hover:bg-amber-600 text-white w-8 h-8 rounded-md font-bold text-lg flex items-center justify-center transition shadow-sm">-</button>
@@ -1837,7 +1842,6 @@
                         existingControls.querySelector('.item-qty-display').innerText = totalQtyForCard;
                         
                         // تحديث مرجع الاسم المستهدف لأحدث وجبة ومواصفات مضافة
-                        let targetUniqueName = cartItems[cartItems.length - 1].name;
                         const btns = existingControls.querySelectorAll('button');
                         if(btns.length >= 2) {
                             btns[0].setAttribute('onclick', `changeQtyFromCard('${targetUniqueName}', -1)`);
@@ -1978,7 +1982,7 @@
                         <div style="background: #fff; padding: 20px; border-radius: 16px; text-align: center; max-width: 400px; width: 100%; max-height: 90vh; overflow-y: auto; font-family: 'Cairo', sans-serif; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
                             <div style="color: #10b981; font-size: 40px; margin-bottom: 10px;"><i class="fas fa-check-circle"></i></div>
                             <h3 style="margin-top: 0; color: #1e3a8a; font-size: 20px; font-weight: bold; margin-bottom: 4px;">تم تأكيد طلبك بنجاح! 🎉</h3>
-                                                                                
+                                                                                                                        
                             <div style="background: #f3f4f6; padding: 10px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: center;">
                                 <img src="${imageData}" style="max-width: 100%; height: auto; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);" alt="شيك الطلب">
                             </div>
@@ -2023,6 +2027,6 @@
 
             window.open(url, '_blank');
         };
-    </script>
+</script>
 </body>
 </html>
