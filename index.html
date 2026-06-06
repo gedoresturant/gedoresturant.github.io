@@ -1634,6 +1634,7 @@
         let cart = [];
         let deliveryCost = 0;
 
+        // فتح وإغلاق السلة الجانبية بشكل يدوي فقط بناءً على طلب المستخدم
         function toggleCart() {
             const sidebar = document.getElementById('cart-sidebar');
             sidebar.classList.toggle('translate-x-full');
@@ -1657,10 +1658,10 @@
             });
         }
 
-        // تعديل دالة إضافة المنتج لتدعم عدم التكرار ونظام الكميات مع المقاسات والإضافات
+        // دالة إضافة الوجبات وتحديثها بنظام الكميات (دون فتح السلة الجانبية)
         function addToCart(name, price, sizeRadioName, extraCheckName) {
             let finalName = name;
-            let finalPrice = parseFloat(price);
+            let finalPrice = price;
 
             if (sizeRadioName) {
                 const sizeRadio = document.querySelector(`input[name="${sizeRadioName}"]:checked`);
@@ -1679,23 +1680,17 @@
                 });
             }
 
-            // التحقق إذا كان نفس المنتج (بنفس الحجم والإضافات) مضاف مسبقاً
-            const existingItem = cart.find(item => item.name === finalName);
-
+            // البحث عن الوجبة بنفس الاسم والمواصفات داخل السلة للتعامل مع الكمية
+            let existingItem = cart.find(item => item.name === finalName);
             if (existingItem) {
-                existingItem.quantity += 1; // زيادة العدد فقط
+                existingItem.qty += 1;
             } else {
-                cart.push({ 
-                    name: finalName, 
-                    price: finalPrice,
-                    quantity: 1 // إضافة أول مرة بكمية 1
-                });
+                cart.push({ name: finalName, price: finalPrice, qty: 1 });
             }
 
             updateCartUI();
             
-            const sidebar = document.getElementById('cart-sidebar');
-            sidebar.classList.remove('translate-x-full');
+            // تم إزالة كود إظهار السلة تلقائياً (تظل مخفية بناءً على طلبك)
         }
 
         function updateDeliveryCost() {
@@ -1704,26 +1699,32 @@
             updateCartUI();
         }
 
-        // دالة لتعديل الكمية (+ أو -) مباشرة من واجهة السلة
-        function changeQuantity(index, amount) {
-            cart[index].quantity += amount;
-            
-            // إذا وصلت الكمية لصفر يتم حذف الوجبة تماماً
-            if (cart[index].quantity <= 0) {
+        // دالة إنقاص الكمية أو الحذف من داخل السلة الجانبية
+        function removeFromCart(index) {
+            if (cart[index].qty > 1) {
+                cart[index].qty -= 1;
+            } else {
                 cart.splice(index, 1);
             }
             updateCartUI();
         }
 
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCartUI();
-        }
+        // دوال للتحكم بالعداد مباشرة من كروت الوجبات برة المنيو
+        window.changeQtyFromCard = function(uniqueName, change) {
+            let cartItem = cart.find(item => item.name === uniqueName);
+            if (!cartItem) return;
 
-        // تحديث واجهة السلة لتعرض العدادات وأزرار التحكم بالكمية بشكل صحيح
+            cartItem.qty += change;
+            if (cartItem.qty <= 0) {
+                cart = cart.filter(item => item.name !== uniqueName);
+            }
+            updateCartUI();
+        };
+
+        // تحديث السلة برة وجوة مع مزامنة العدادات لكل وجبة مفردة
         function updateCartUI() {
-            // حساب إجمالي عدد القطع الفعلي في السلة لتحديث العداد العلوي للموقع
-            const totalItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            // حساب العدد الإجمالي الفعلي للوجبات بناءً على الكميات
+            let totalItemsCount = cart.reduce((sum, item) => sum + item.qty, 0);
             document.getElementById('cart-count').innerText = totalItemsCount;
             
             const cartItemsContainer = document.getElementById('cart-items');
@@ -1733,6 +1734,7 @@
                 cartItemsContainer.innerHTML = '<p class="text-gray-500 text-center py-8" id="empty-cart-msg">السلة فارغة حالياً. ابدأ بإضافة وجباتك المفضلة!</p>';
                 document.getElementById('cart-total').innerText = '0 ج.م';
                 document.getElementById('checkout-form-container').classList.add('hidden');
+                syncCardCounters(); // تصفير العدادات الخارجية
                 return;
             }
 
@@ -1741,24 +1743,20 @@
 
             let subtotal = 0;
             cart.forEach((item, index) => {
-                // حساب السعر الفرعي للمنتج بناءً على كميته
-                let itemTotal = item.price * item.quantity;
-                subtotal += itemTotal;
+                let itemTotalCost = item.price * item.qty;
+                subtotal += itemTotalCost;
                 
                 cartItemsContainer.innerHTML += `
-                    <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-100">
-                        <div class="flex-1 min-w-0 pr-2">
-                            <h5 class="font-bold text-sm text-gray-900 truncate">${item.name}</h5>
-                            <span class="text-xs text-amber-600 font-semibold">${itemTotal.toFixed(2)} ج.م <span class="text-gray-400 font-normal">(${item.price} ج.م للوحدة)</span></span>
+                    <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-100 shadow-sm mb-2" data-cart-item-name="${item.name}">
+                        <div>
+                            <h5 class="font-bold text-sm text-gray-900">${item.name}</h5>
+                            <span class="text-xs text-amber-600 font-semibold">${item.price} ج.م × ${item.qty}</span>
                         </div>
-                        
-                        <div class="flex items-center gap-2 bg-white px-2 py-1 rounded-md border border-gray-200 ml-3">
-                            <button onclick="changeQuantity(${index}, 1)" class="text-blue-900 hover:text-blue-700 font-bold text-sm px-1">+</button>
-                            <span class="font-bold text-xs text-gray-800 w-4 text-center">${item.quantity}</span>
-                            <button onclick="changeQuantity(${index}, -1)" class="text-red-500 hover:text-red-700 font-bold text-sm px-1">-</button>
+                        <div class="flex items-center gap-2">
+                            <button onclick="changeQtyFromCard('${item.name}', -1)" class="bg-gray-200 text-gray-700 w-6 h-6 rounded-full font-bold flex items-center justify-center hover:bg-gray-300">-</button>
+                            <span class="font-bold text-sm text-gray-800">${item.qty}</span>
+                            <button onclick="changeQtyFromCard('${item.name}', 1)" class="bg-gray-200 text-gray-700 w-6 h-6 rounded-full font-bold flex items-center justify-center hover:bg-gray-300">+</button>
                         </div>
-
-                        <button onclick="removeFromCart(${index})" class="text-gray-400 hover:text-red-500 text-sm transition mr-1"><i class="fas fa-trash-alt"></i></button>
                     </div>
                 `;
             });
@@ -1781,6 +1779,78 @@
                     <span>الإجمالي الشامل:</span> <span>${total.toFixed(2)} ج.م</span>
                 </div>
             `;
+
+            // مزامنة دقيقة وتحديث للعدادات على كروت المنتجات الخارجية في الـ DOM
+            syncCardCounters();
+        }
+
+        // كود المزامنة لبناء وعرض عداد ( + و - ) تفاعلي مباشرةً تحت كل وجبة بالصفحة
+        function syncCardCounters() {
+            const cards = document.querySelectorAll('.item-card');
+            cards.forEach(card => {
+                // قراءة زر الإضافة الافتراضي داخل الكارت
+                const mainBtn = card.querySelector('button[onclick^="addToCart"]') || card.querySelector('.original-add-btn');
+                if (!mainBtn) return;
+
+                // استخراج اسم الوجبة الأساسي المخزن لتحديد هويته
+                let onclickText = mainBtn.getAttribute('onclick') || mainBtn.getAttribute('data-stored-onclick') || '';
+                if (!onclickText && mainBtn.getAttribute('data-stored-onclick')) {
+                    onclickText = mainBtn.getAttribute('data-stored-onclick');
+                }
+                
+                const matches = onclickText.match(/addToCart\s*\(\s*'([^']+)'/);
+                if (!matches || !matches[1]) return;
+                const baseItemName = matches[1].trim();
+
+                // حفظ الدالة الأصلية للرجوع إليها لاحقاً عند التصفير
+                if (!mainBtn.getAttribute('data-stored-onclick')) {
+                    mainBtn.setAttribute('data-stored-onclick', onclickText);
+                    mainBtn.classList.add('original-add-btn');
+                }
+
+                // فحص ما إذا كانت الوجبة (أو مشتقاتها بالحجم والإضافات) موجودة بالسلة حالياً
+                let cartItems = cart.filter(item => item.name === baseItemName || item.name.startsWith(baseItemName + " (") || item.name.startsWith(baseItemName + " +"));
+                let totalQtyForCard = cartItems.reduce((sum, item) => sum + item.qty, 0);
+
+                let existingControls = card.querySelector('.qty-controls-wrapper');
+
+                if (totalQtyForCard > 0) {
+                    // إخفاء زرار "أضف للسلة" وبناء أزرار العداد البديلة مكانه
+                    mainBtn.style.display = 'none';
+                    mainBtn.removeAttribute('onclick');
+
+                    if (!existingControls) {
+                        const qtyControls = document.createElement('div');
+                        qtyControls.className = 'qty-controls-wrapper flex items-center justify-between bg-gray-100 rounded-lg p-1 border border-gray-200 w-full mt-2';
+                        
+                        // نستخدم اسم آخر وجبة تم التعامل معها لربط عمليات العداد بدقة
+                        let targetUniqueName = cartItems[cartItems.length - 1].name;
+                        
+                        qtyControls.innerHTML = `
+                            <button onclick="changeQtyFromCard('${targetUniqueName}', -1)" class="bg-amber-500 hover:bg-amber-600 text-white w-8 h-8 rounded-md font-bold text-lg flex items-center justify-center transition shadow-sm">-</button>
+                            <span class="item-qty-display font-bold text-gray-800 text-base mx-3">${totalQtyForCard}</span>
+                            <button onclick="changeQtyFromCard('${targetUniqueName}', 1)" class="bg-blue-900 hover:bg-blue-950 text-white w-8 h-8 rounded-md font-bold text-lg flex items-center justify-center transition shadow-sm">+</button>
+                        `;
+                        mainBtn.parentElement.appendChild(qtyControls);
+                    } else {
+                        // تحديث الرقم فقط لو العداد مبني بالفعل
+                        existingControls.querySelector('.item-qty-display').innerText = totalQtyForCard;
+                        
+                        // تحديث مرجع الاسم المستهدف لأحدث وجبة ومواصفات مضافة
+                        let targetUniqueName = cartItems[cartItems.length - 1].name;
+                        const btns = existingControls.querySelectorAll('button');
+                        if(btns.length >= 2) {
+                            btns[0].setAttribute('onclick', `changeQtyFromCard('${targetUniqueName}', -1)`);
+                            btns[1].setAttribute('onclick', `changeQtyFromCard('${targetUniqueName}', 1)`);
+                        }
+                    }
+                } else {
+                    // إذا أصبحت الكمية 0، نحذف العداد ونظهر زرار الإضافة الأصلي بكفاءة
+                    if (existingControls) existingControls.remove();
+                    mainBtn.setAttribute('onclick', mainBtn.getAttribute('data-stored-onclick'));
+                    mainBtn.style.display = 'flex';
+                }
+            });
         }
 
         function proceedToCheckout() {
@@ -1807,11 +1877,11 @@
                 }
 
                 let subtotal = 0;
-                cart.forEach(item => subtotal += (item.price * item.quantity));
+                cart.forEach(item => subtotal += (item.price * item.qty));
                 let tax = subtotal * 0.14;
                 let total = subtotal + tax + deliveryCost;
 
-                // تحضير نص الواتساب مسبقاً وتضمين الكمية لكل وجبة
+                // تحضير نص بون الواتساب متضمناً الكميات والمجاميع المفصلة
                 let orderText = `*طلب دليفري جديد من الموقع*\n\n`;
                 orderText += `*العميل:* ${name}\n`;
                 orderText += `*الموبايل:* ${phone}\n`;
@@ -1820,15 +1890,14 @@
                 orderText += `*الطلبات:*\n`;
                 
                 cart.forEach((item, i) => {
-                    let itemTotal = item.price * item.quantity;
-                    orderText += `${i+1}. ${item.name} (الكمية: ${item.quantity}) -> ${itemTotal.toFixed(2)} ج.م\n`;
+                    orderText += `${i+1}. ${item.name} [الكمية: ${item.qty}] -> ${(item.price * item.qty).toFixed(2)} ج.م\n`;
                 });
                 
                 orderText += `\n-----------------------\n`;
                 orderText += `*المجموع الأساسي:* ${subtotal.toFixed(2)} ج.م\n`;
                 orderText += `*الضريبة (14%):* ${tax.toFixed(2)} ج.م\n`;
                 if(deliveryCost > 0) {
-                    orderText += `*التوصيل:* ${deliveryCost.toFixed(2)} ج.m\n`;
+                    orderText += `*التوصيل:* ${deliveryCost.toFixed(2)} ج.م\n`;
                 }
                 orderText += `*الإجمالي الشامل:* ${total.toFixed(2)} ج.م`;
 
@@ -1842,18 +1911,17 @@
                 document.getElementById('checkout-btn').innerText = 'جاري إصدار الشيك...';
                 document.getElementById('checkout-btn').disabled = true;
 
-                // 1. بناء عنصر الـ HTML الفاتورة ليعكس الكميات الجديدة بالشيك الصوري بشكل صحيح
+                // بناء عنصر الـ HTML الخفي المخصص لالتقاط الشيك كصورة (بون المطبخ الشامل للكميات)
                 const receiptTempDiv = document.createElement('div');
                 receiptTempDiv.id = 'temp-receipt-capture';
                 receiptTempDiv.style = 'position: absolute; left: -9999px; width: 350px; padding: 25px 20px; background: #fff; font-family: "Cairo", sans-serif; text-align: right; direction: rtl;';
 
                 let receiptItemsHtml = '';
                 cart.forEach((item, i) => {
-                    let itemTotal = item.price * item.quantity;
                     receiptItemsHtml += `
                         <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; border-bottom: 1px dashed #e5e7eb; padding-bottom: 6px; font-weight: 600;">
-                            <span>${i+1}. ${item.name} <span style="color: #6b7280; font-weight: normal;">(x${item.quantity})</span></span>
-                            <span style="color: #b45309;">${itemTotal.toFixed(2)} ج.م</span>
+                            <span>${i+1}. ${item.name} (×${item.qty})</span>
+                            <span style="color: #b45309;">${(item.price * item.qty).toFixed(2)} ج.م</span>
                         </div>
                     `;
                 });
@@ -1890,19 +1958,19 @@
                             <span>الإجمالي الشامل:</span> <span>${total.toFixed(2)} ج.م</span>
                         </div>
                     </div>
-                    <div style="text-align: center; margin-top: 20px; font-size: 10px; color: #9ca3af; border-top: 1px dashed #e5e7eb; padding-top: 10px;">
+                    <div style="text-align: center; margin-top: 20px; font-size: 10px; color: #9ca3af; border-top: 1px dashed #e5e7eb; pt-10;">
                         شكراً لاختياركم قرية جدو | تم الطلب عبر الموقع الإلكتروني
                     </div>
                 `;
 
                 document.body.appendChild(receiptTempDiv);
 
-                // 2. التقاط الفاتورة وتحويلها لـ Image
+                // تحويل الفاتورة الخفية لـ Canvas وصورة PNG نقية
                 html2canvas(document.getElementById('temp-receipt-capture'), { scale: 2 }).then(canvas => {
                     const imageData = canvas.toDataURL("image/png");
-                    document.body.removeChild(receiptTempDiv); 
+                    document.body.removeChild(receiptTempDiv); // تنظيف الـ DOM مباشرة
                     
-                    // 3. بناء المودال المنبثق لعرض الصورة وتوفير زر التحميل والمتابعة
+                    // بناء المودال الإحترافي لعرض الشيك وتأكيد الواتساب النهائي للعميل
                     const modalDiv = document.createElement('div');
                     modalDiv.id = 'receipt-modal';
                     modalDiv.style = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); display: flex; justify-content: center; align-items: center; z-index: 10000; direction: rtl; padding: 15px;';
@@ -1910,7 +1978,7 @@
                         <div style="background: #fff; padding: 20px; border-radius: 16px; text-align: center; max-width: 400px; width: 100%; max-height: 90vh; overflow-y: auto; font-family: 'Cairo', sans-serif; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
                             <div style="color: #10b981; font-size: 40px; margin-bottom: 10px;"><i class="fas fa-check-circle"></i></div>
                             <h3 style="margin-top: 0; color: #1e3a8a; font-size: 20px; font-weight: bold; margin-bottom: 4px;">تم تأكيد طلبك بنجاح! 🎉</h3>
-                                                                        
+                                                                                
                             <div style="background: #f3f4f6; padding: 10px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: center;">
                                 <img src="${imageData}" style="max-width: 100%; height: auto; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);" alt="شيك الطلب">
                             </div>
@@ -1920,7 +1988,7 @@
                             </a>
                             
                             <button onclick="finaliseOrderAndOpenWhatsApp('${whatsappUrl}')" style="background: #1e3a8a; color: #fff; border: 0; padding: 10px 20px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; font-size: 14px; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#1e3b8b'" onmouseout="this.style.backgroundColor='#1e3a8a'">
-                                تاكيد الطلب واتساب <i class="fas fa-chevron-left mr-1"></i>
+                                تأكيد الطلب واتساب <i class="fas fa-chevron-left mr-1"></i>
                             </button>
                         </div>
                     `;
@@ -1929,25 +1997,32 @@
                     document.getElementById('checkout-btn').innerText = 'إرسال الطلب النهائي';
                     document.getElementById('checkout-btn').disabled = false;
                 }).catch(err => {
-                    console.error("خطأ في توليد الشيك:", err);
+                    console.error("خطأ في توليد الشيك الحسابي المحدث:", err);
                     window.open(whatsappUrl, '_blank');
                 });
             }
         }
 
+        // تفريغ السلة وتنظيف الحقول تماماً بعد توجيه العميل للواتساب
         window.finaliseOrderAndOpenWhatsApp = function(url) {
             const modal = document.getElementById('receipt-modal');
             if(modal) document.body.removeChild(modal);
 
             cart = [];
             updateCartUI();
-            toggleCart();
+            
+            // نغلق السلة الجانبية تلقائياً بعد إنهاء وإرسال الطلب بنجاح
+            const sidebar = document.getElementById('cart-sidebar');
+            if(sidebar && !sidebar.classList.contains('translate-x-full')) {
+                sidebar.classList.add('translate-x-full');
+            }
+
             document.getElementById('cust-name').value = '';
             document.getElementById('cust-phone').value = '';
             document.getElementById('cust-address').value = '';
 
             window.open(url, '_blank');
         };
-</script>
+    </script>
 </body>
 </html>
